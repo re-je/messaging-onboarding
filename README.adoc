@@ -1,14 +1,14 @@
 :experimental:
 = Messaging stack on-boarding
 
-This documentation is designed as a walk-through to onboard users to the ABC-RP messaging stack.
+This documentation is designed as a walk-through to onboard users to the re.je messaging stack.
 It will demonstrate an exemplary onboarding process as well as linking to further reading regarding the standards employed.
 
 Efforts have been made to link to rather than duplicate other documentation.
 
 == Overview
 
-The ABC-RP messaging stack is based on the following projects and standards:
+The re.je messaging stack is based on the following projects and standards:
 
 * link:https://mqtt.org/[MQTT] (Network protocol)
 * link:https://github.com/theodi/BDNS[Building Device Naming Standards initiative (BDNS)] (Device naming)
@@ -26,7 +26,7 @@ The usual command line tools:
 
 == Concepts
 
-This section explains some key concepts of the ABC-RP messaging infrastructure.
+This section explains some key concepts of the re.je messaging infrastructure.
 
 We align with the link:https://github.com/theodi/BDNS[Building Device Naming Standards initiative (BDNS)], link:https://github.com/google/digitalbuildings[Digital Buildings Ontology (DBO)] and link:https://github.com/faucetsdn/udmi[Universal Device Management Interface (UDMI)] projects so please review these projects documentation alongside this.
 
@@ -60,10 +60,10 @@ Each device is owned by exactly one application and has at least one ID to ident
 
 === Endpoint hostnames
 
-End point hostnames will be provided by ABC-RP as part of your onboarding information.
+End point hostnames will be provided by re.je as part of your onboarding information.
 Example values are shown below:
 
-* `mqtt.facilities.abc-rp.com:443` For devices connecting to MQTT Protocol Endpoint
+* `mqtt.facilities.re.je:443` For devices connecting to MQTT Protocol Endpoint
 
 === Encryption
 
@@ -121,8 +121,8 @@ NOTE: All devices in under an application must have unique names.
 
 === Device Gateways
 
-The most straightforward scenario is a device connecting to one of ABC-RP’s protocol endpoints directly via IP based network infrastructure.
-For this to work, the device needs to use a supported communication protocol. For the ABC-RP stack MQTT is recommended.
+The most straightforward scenario is a device connecting to one of re.je’s protocol endpoints directly via IP based network infrastructure.
+For this to work, the device needs to use a supported communication protocol. For the re.je stack MQTT is recommended.
 
 In some cases, a device may not be able to directly connect to one of these protocol endpoints. An example is a device that uses a serial bus or radio waves for local communication. Such devices can be connected to a protocol endpoint by means of a device gateway which acts on behalf of the device(s) when communicating with the cloud.
 
@@ -180,11 +180,11 @@ Additional `level` and `zone` information is provided at a per device level unde
 
     <level>_<zone>
 
-For example if device `GB-CAM-BLD2_MTS-1` is located in the ground floor kitchen the `section` would be:
+For example if device `GB-CMD-BLD2_MTS-1` is located in the ground floor kitchen the `section` would be:
 
     GF_KITCHEN-1
 
-If device `GB-CAM-BLD2_MTS-2` is located in the second first floor bedroom the `section` would be:
+If device `GB-CMD-BLD2_MTS-2` is located in the second first floor bedroom the `section` would be:
 
     01_BEDROOM-2
 
@@ -257,9 +257,9 @@ When we have identified the point names for our device we need to encode them in
 
 To do this we will follow the link:https://github.com/faucetsdn/udmi[UDMI] Schema.
 
-TIP: We provide a CLI tool link:https://github.com/abc-rp/validate_udmi[validate_udmi] to check your json payloads.
+TIP: We provide a CLI tool link:https://github.com/re-je/validate_udmi[validate_udmi] to check your json payloads.
 
-An example payload for our Jersey temperature sensor `GB-SWA-BLD1_TPS-75` using the above point names may look something like the below:
+An example payload for our Swansea temperature sensor `GB-SWA-BLD1_TPS-75` using the above point names may look something like the below:
 
 [source,json]
 ----
@@ -291,9 +291,9 @@ If using a gateway device, it is expected that the channel and child devices ids
 
     <channel>/<device>
 
-For example if `GB-CAM-BLD2_CGW-1` is sending a `pointset` on behalf of `GB-CAM-BLD2_TSTAT-1` the MQTT topic would be:
+For example if `GB-CMD-BLD2_CGW-1` is sending a `pointset` on behalf of `GB-CMD-BLD2_TSTAT-1` the MQTT topic would be:
 
-    pointset/GB-CAM-BLD2_TSTAT-1
+    pointset/GB-CMD-BLD2_TSTAT-1
 
 
 == Publishing Data to the MQTT Endpoint
@@ -312,8 +312,8 @@ Now we have a timestamp we can create a simulated payload for our device and sen
 
 [source,bash]
 ----
-$ mqtt pub -v -h mqtt.facilities.abc-rp.com -p 443 \
-  -u 'GB-SWA-BLD1_TPS-75@swansea-iot' -pw 'my-strong-password' \
+$ mqtt pub -v -h mqtt.facilities.re.je -p 443 \
+  -u 'GB-SWA-BLD1_TPS-75@swansea-prod-iot' -pw 'my-strong-password' \
   -s -t pointset -m '{
   "version": 1,
   "timestamp": "2019-01-17T14:02:29.364Z",
@@ -338,7 +338,7 @@ Overview of above command:
 |Publish a message
 
 |`-h`
-|`mqtt.facilities.abc-rp.com`
+|`mqtt.facilities.re.je`
 |The hostname of the message broker
 
 |`-p`
