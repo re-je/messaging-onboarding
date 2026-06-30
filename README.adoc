@@ -184,7 +184,7 @@ For example if device `GB-CMD-BLD2_MTS-1` is located in the ground floor kitchen
 
     00_KITCHEN-1
 
-If device `GB-CMD-BLD2_MTS-2` is located in the second first floor bedroom the `section` would be:
+If device `GB-CMD-BLD2_MTS-2` is located in the second bedroom on the first floor the `section` would be:
 
     01_BEDROOM-2
 
@@ -225,9 +225,6 @@ NOTE: See link:https://docs.google.com/spreadsheets/d/e/2PACX-1vQPnrZD7-jdw6qK-7
 |02
 |Floor 2, etc
 
-|RF
-|Roof / Loft
-
 |M1
 |Mezzanine above Level 1
 
@@ -235,10 +232,10 @@ NOTE: See link:https://docs.google.com/spreadsheets/d/e/2PACX-1vQPnrZD7-jdw6qK-7
 |Mezzanine above Level 2
 
 |B1
-|Floor -1
+|Basement Level 1
 
 |B2
-|Floor -2
+|Basement Level 2
 |===
 
 == Units
@@ -264,7 +261,7 @@ An example payload for our Swansea temperature sensor `GB-SWA-BLD1_TPS-75` using
 [source,json]
 ----
 {
-  "version": 1,
+  "version": "1",
   "timestamp": "2019-01-17T14:02:29.364Z",
   "points": {
     "zone_air_temperature_sensor": {
@@ -315,7 +312,7 @@ Now we have a timestamp we can create a simulated payload for our device and sen
 $ mqtt pub -v -h mqtt.facilities.re.je -p 443 \
   -u 'GB-SWA-BLD1_TPS-75@swansea-prod-iot' -pw 'my-strong-password' \
   -s -t pointset -m '{
-  "version": 1,
+  "version": "1",
   "timestamp": "2019-01-17T14:02:29.364Z",
   "points": {
     "zone_air_temperature_sensor": {
