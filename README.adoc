@@ -91,8 +91,8 @@ An example Application ID might be:
 link:https://github.com/theodi/BDNS[Building Device Naming Standards initiative (BDNS)]
 
 Device naming should follow the emerging [acronym]`BDNS` standard.
-The specification can be found on this link:https://github.com/theodi/BDNS/blob/master/BDNS_Specification_naming_syntax.md[Github page].
-Also follow the current link:https://github.com/theodi/BDNS/blob/master/BDNS_Abbreviations_Register.csv[Abbreviations Register].
+The specification can be found on this link:https://github.com/theodi/BDNS/blob/main/BDNS_Specification_naming_syntax.md[Github page].
+Also follow the current link:https://github.com/theodi/BDNS/blob/main/BDNS_Abbreviations_Register.csv[Abbreviations Register].
 
 NOTE: Check the link:https://github.com/theodi/BDNS/branches[development branches] for the latest abbreviations
 
