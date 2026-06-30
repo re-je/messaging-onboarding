@@ -1,0 +1,118 @@
+= Section token naming
+
+This document defines how the *space-type token* within a `section` value is named.
+It expands on the `Section` concept introduced in the messaging stack on-boarding guide, and should be read alongside it.
+
+The token is derived from a single upstream source — link:https://uniclass.thenbs.com/[Uniclass 2015], the UK construction classification published by NBS and structured in accordance with link:https://www.iso.org/standard/61753.html[ISO 12006-2]. This keeps space typing consistent with the wider standards the stack already aligns with, and avoids inventing a bespoke vocabulary.
+
+== Overview
+
+Recall that `section` is recorded per device and follows the ISO 19650 form:
+
+----
+<level>_<zone>
+----
+
+The `<zone>` is in turn composed of a *space-type token* and a 1-indexed instance suffix:
+
+----
+<TYPE>-<n>
+----
+
+So in `00_KITCHEN-1`, `00` is the level, `KITCHEN` is the space-type token, and `-1` is the first kitchen on that level.
+
+This document standardises the `<TYPE>` part. The level vocabulary and the instance suffix are unchanged from the on-boarding guide.
+
+== Canonical identifier
+
+The authoritative identifier for a space type is its *Uniclass SL code* (for example `SL_45_10_23`), not the token and not the title.
+
+* The SL *code* is stable: NBS commits to its persistence across releases.
+* The SL *title* may be re-worded between releases (for clarity, splits, or merges).
+* The *token* is a convenience form derived from the title, for use inside the `section` string.
+
+Store the SL code alongside the `section` value (for example in a `spaceTypeCode` column in the metadata table). The token exists only so that `section` stays human-readable; the code is what downstream systems should key on.
+
+NOTE: Domestic space types are not confined to the residential branch of SL. They are drawn from four groups: `SL_45_10` Living spaces, `SL_35_80` Sanitary spaces, `SL_90_10` Circulation spaces and `SL_90_50` Storage spaces. Always confirm a code against the link:https://uniclass.thenbs.com/taxon/sl[current SL table].
+
+== Deriving the token
+
+The token is a deterministic function of the SL title. Apply these steps in order:
+
+. Start from the Uniclass SL title.
+. Use the *singular* form (SL titles are plural, e.g. `Bedrooms` -> bedroom).
+. Drop the redundant `Domestic` qualifier — the whole set is domestic, so it carries no information here.
+. Drop a trailing *generic space-noun when it is a separate word*: `room`, `hall`, `space`. For example `Living room` -> `LIVING`, `Entrance hall` -> `ENTRANCE`.
+. Do *not* strip those letters when they are part of a compound single word. `Bedroom`, `Bathroom`, `Hallway` and `Stairway` are left whole — never reduce `Bedroom` to `BED`.
+. Keep Uniclass's own vocabulary. Do not substitute synonyms (no `WC` for `Toilet`, no `LOUNGE` for `Living room`).
+. Where dropping a qualifier would collide with another token, keep the qualifier. `Single-occupancy bedroom` retains its qualifier so it stays distinct from `Bedroom`.
+. Uppercase the result and remove all spaces and hyphens.
+
+The last step matters for parsing: `_` separates the level from the zone and `-` separates the type from the instance index, so neither may appear inside the token. Multi-word types are therefore collapsed (`Kitchen-dining room` -> `KITCHENDINING`).
+
+IMPORTANT: Treat the token column as *generated output*, never as hand-edited input. As long as every token is reproducible from its SL code by the rule above, this remains a view over Uniclass rather than a competing classification. A hand-authored token that the rule would not produce (e.g. typing `SNUG` for a living room) is the point at which the convention quietly forks into a bespoke standard — so don't.
+
+== Worked examples
+
+[%header,cols="2,2,1"]
+|===
+|`section` |Meaning |Notes
+
+|`00_KITCHEN-1`
+|First kitchen, ground floor
+|
+
+|`01_BEDROOM-2`
+|Second bedroom, first floor
+|
+
+|`00_KITCHENDINING-1`
+|Open-plan kitchen-diner, ground floor
+|Combined type; single SL code `SL_45_10_44`
+
+|`01_BATHROOM-1`
+|First bathroom, first floor
+|Drawn from the Sanitary group
+|===
+
+== Reference table
+
+The current set of domestic space types and their tokens. Codes and titles are from Uniclass *Spaces/locations (SL) v1.35, April 2026*; confirm against the current table before adding new entries.
+
+[%header,cols="2,3,2"]
+|===
+|Uniclass SL code |Uniclass title |Section token
+
+|SL_45_10_23 |Domestic kitchens |KITCHEN
+|SL_45_10_22 |Domestic dining rooms |DINING
+|SL_45_10_49 |Living rooms |LIVING
+|SL_45_10_44 |Kitchen-dining rooms |KITCHENDINING
+|SL_45_10_45 |Kitchen-dining-living rooms |KITCHENDININGLIVING
+|SL_45_10_09 |Bedrooms |BEDROOM
+|SL_45_10_78 |Single-occupancy bedrooms |SINGLEOCCUPANCYBEDROOM
+|SL_45_10_08 |Bedroom-studies |BEDROOMSTUDY
+|SL_45_10_85 |Studies |STUDY
+|SL_45_10_93 |Utility rooms |UTILITY
+|SL_45_10_18 |Conservatories |CONSERVATORY
+|SL_45_10_06 |Balconies |BALCONY
+|SL_35_80_08 |Bathrooms |BATHROOM
+|SL_35_80_89 |Toilets |TOILET
+|SL_35_80_80 |Showers |SHOWER
+|SL_90_10_36 |Hallways |HALLWAY
+|SL_90_10_27 |Entrance halls |ENTRANCE
+|SL_90_10_15 |Corridors |CORRIDOR
+|SL_90_10_46 |Landings |LANDING
+|SL_90_10_87 |Stairways |STAIRWAY
+|SL_90_50_33 |Garages |GARAGE
+|===
+
+== Adding a new type
+
+. Find the type in the link:https://uniclass.thenbs.com/taxon/sl[Uniclass SL table] and take its code.
+. If no exact code exists, choose the closest dominant-function code rather than coining your own — the Uniclass licence (CC BY-ND) does not permit adding local codes; suggest additions to NBS instead.
+. Derive the token by the rule above and add the row.
+. Record the SL version you took the code from.
+
+== Keeping in sync
+
+Pin the Uniclass SL version in the repository so that a future refresh is a clear diff. Uniclass is updated roughly quarterly; only the codes and titles you actually use need tracking, so review the table against the latest SL release when convenient rather than mirroring the whole table.

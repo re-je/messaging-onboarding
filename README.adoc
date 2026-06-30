@@ -91,8 +91,8 @@ An example Application ID might be:
 link:https://github.com/theodi/BDNS[Building Device Naming Standards initiative (BDNS)]
 
 Device naming should follow the emerging [acronym]`BDNS` standard.
-The specification can be found on this link:https://github.com/theodi/BDNS/blob/master/BDNS_Specification_naming_syntax.md[Github page].
-Also follow the current link:https://github.com/theodi/BDNS/blob/master/BDNS_Abbreviations_Register.csv[Abbreviations Register].
+The specification can be found on this link:https://github.com/theodi/BDNS/blob/main/BDNS_Specification_naming_syntax.md[Github page].
+Also follow the current link:https://github.com/theodi/BDNS/blob/main/BDNS_Abbreviations_Register.csv[Abbreviations Register].
 
 NOTE: Check the link:https://github.com/theodi/BDNS/branches[development branches] for the latest abbreviations
 
@@ -182,9 +182,9 @@ Additional `level` and `zone` information is provided at a per device level unde
 
 For example if device `GB-CMD-BLD2_MTS-1` is located in the ground floor kitchen the `section` would be:
 
-    GF_KITCHEN-1
+    00_KITCHEN-1
 
-If device `GB-CMD-BLD2_MTS-2` is located in the second first floor bedroom the `section` would be:
+If device `GB-CMD-BLD2_MTS-2` is located in the second bedroom on the first floor the `section` would be:
 
     01_BEDROOM-2
 
@@ -195,7 +195,7 @@ Example ISO 19650 zones and levels:
 |ID |Description
 
 |ZZ
-|Multiple Zones (e.g. all of the GF)
+|Multiple Zones (e.g. all of the 00)
 
 |XX
 |No Zone Applicable (rarely used)
@@ -204,7 +204,7 @@ Example ISO 19650 zones and levels:
 |Name of a particular zone (1 indexed)
 |===
 
-NOTE: See link:https://docs.google.com/spreadsheets/d/e/2PACX-1vQPnrZD7-jdw6qK-7PEFHt3azwtwiHvTg6yv493Vtn8o_qPAkpI49qiEkzRX4kqiL2koQcAiyrwWamh/pubhtml[zones spreadsheet] for currently used domestic zones. 
+NOTE: See link:section.adoc[Section token naming] for the domestic space-type tokens and how they are derived from Uniclass.
 
 .Level
 |===
@@ -216,7 +216,7 @@ NOTE: See link:https://docs.google.com/spreadsheets/d/e/2PACX-1vQPnrZD7-jdw6qK-7
 |XX
 |No Level Applicable (rarely used)
 
-|GF
+|00
 |Ground Floor
 
 |01
@@ -225,9 +225,6 @@ NOTE: See link:https://docs.google.com/spreadsheets/d/e/2PACX-1vQPnrZD7-jdw6qK-7
 |02
 |Floor 2, etc
 
-|RF
-|Roof / Loft
-
 |M1
 |Mezzanine above Level 1
 
@@ -235,10 +232,10 @@ NOTE: See link:https://docs.google.com/spreadsheets/d/e/2PACX-1vQPnrZD7-jdw6qK-7
 |Mezzanine above Level 2
 
 |B1
-|Floor -1
+|Basement Level 1
 
 |B2
-|Floor -2
+|Basement Level 2
 |===
 
 == Units
@@ -264,7 +261,7 @@ An example payload for our Swansea temperature sensor `GB-SWA-BLD1_TPS-75` using
 [source,json]
 ----
 {
-  "version": 1,
+  "version": "1",
   "timestamp": "2019-01-17T14:02:29.364Z",
   "points": {
     "zone_air_temperature_sensor": {
@@ -315,7 +312,7 @@ Now we have a timestamp we can create a simulated payload for our device and sen
 $ mqtt pub -v -h mqtt.facilities.re.je -p 443 \
   -u 'GB-SWA-BLD1_TPS-75@swansea-prod-iot' -pw 'my-strong-password' \
   -s -t pointset -m '{
-  "version": 1,
+  "version": "1",
   "timestamp": "2019-01-17T14:02:29.364Z",
   "points": {
     "zone_air_temperature_sensor": {
