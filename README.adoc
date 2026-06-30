@@ -204,7 +204,7 @@ Example ISO 19650 zones and levels:
 |Name of a particular zone (1 indexed)
 |===
 
-NOTE: See link:https://docs.google.com/spreadsheets/d/e/2PACX-1vQPnrZD7-jdw6qK-7PEFHt3azwtwiHvTg6yv493Vtn8o_qPAkpI49qiEkzRX4kqiL2koQcAiyrwWamh/pubhtml[zones spreadsheet] for currently used domestic zones. 
+NOTE: See link:section.adoc[Section token naming] for the domestic space-type tokens and how they are derived from Uniclass.
 
 .Level
 |===
